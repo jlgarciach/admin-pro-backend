@@ -35,18 +35,58 @@ const crearMedico = async( req, res = response ) => {
     }
 }
 
-const actualizarMedico = ( req, res = response ) => {
-    res.json({
-        ok: true,
-        msg: 'actualziarMedico'
-    });
+const actualizarMedico = async( req, res = response ) => {
+    const id = req.params.id;
+    const uid = req.uid; // viene del Token
+    try {
+        const medico = await Medico.findById( id );
+        if ( !medico ) {
+            return res.status(400).json({
+                ok: true,
+                msg: 'Médico no encontrado por id'
+            });
+        }
+        const cambiosMedico = {
+            ...req.body,
+            usuario: uid,
+        }
+        const medicoActualizado = await Medico.findByIdAndUpdate( id, cambiosMedico, { new: true} );
+        res.json({
+            ok: true,
+            //msg: 'actualziarMedico',
+            medico: medicoActualizado,
+        });
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el Administrador'
+        });        
+    }
 }
 
-const borrarMedico = ( req, res = response ) => {
-    res.json({
-        ok: true,
-        msg: 'borrarMedico'
-    });
+const borrarMedico = async( req, res = response ) => {
+    const id = req.params.id;
+    try {
+        const medico = await Medico.findById( id );
+        if ( !medico ) {
+            return res.status(400).json({
+                ok: true,
+                msg: 'Médico no encontrado por id'
+            });
+        }
+        // Eliminar Médico de la BDD
+        await Medico.findByIdAndDelete( id );
+        res.json({
+            ok: true,
+            msg: 'Médico eliminado',
+            //medico: medicoActualizado,
+        });
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el Administrador'
+        });        
+    }
 }
 
 module.exports = {

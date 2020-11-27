@@ -27,10 +27,15 @@ router.post( '/',
         crearHospital );
 
 router.put( '/:id', 
-        [], 
+        [
+                validarJWT,
+                check('nombre','El nombre del hospital es obligatorio').not().isEmpty(),
+                validarCampo
+        ], 
         actualizarHospital );
 
 router.delete( '/:id',
+        validarJWT,
         borrarHospital );
 
 module.exports = router;
