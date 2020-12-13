@@ -55,6 +55,7 @@ const googleSignIn = async(req, res =  response) => {
                 nombre: name,
                 email,
                 password: '@@@',
+                // password: '',
                 img: picture,
                 google: true
             });
@@ -67,7 +68,7 @@ const googleSignIn = async(req, res =  response) => {
         // Generar el TOKEN - JWT
         const token = await generarJWT( usuario.id );
 
-        res.status(400).json({
+        res.json({
             ok: true,
             token,
             //msg: 'Google Signin',
@@ -75,8 +76,10 @@ const googleSignIn = async(req, res =  response) => {
             //googleToken
         });
     } catch (error) {        
-        res.status(400).json({
-            ok: true,
+        // res.status(400).json({
+        res.status(401).json({
+            // ok: true,
+            ok: false,
             msg: 'Token invalido!!!'
         });
     }
@@ -89,10 +92,13 @@ const renewToken = async ( req, res = response) => {
     // Generar el TOKEN - JWT
     const token = await generarJWT( uid );
 
+    // Obtener el usuario por UId
+    const usuario = await Usuario.findById( uid )
+
     res.json({
-        ok: true,
-        uid,
-        token
+        ok: true,        
+        token,
+        usuario
     });
 }
 

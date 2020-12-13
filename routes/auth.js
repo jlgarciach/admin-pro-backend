@@ -22,9 +22,9 @@ router.post('/',
 router.post('/google',
     [        
         check('token', 'El Token de Google es obligatorio').not().isEmpty(),
-        googleSignIn
+        validarCampo
     ],
-    login
+    googleSignIn
 );
 
 router.get('/renew',
