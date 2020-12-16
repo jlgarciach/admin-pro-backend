@@ -90,13 +90,13 @@ const actualizarUsuario = async (req, res = response ) => {
         }
         // Esto se ejecuta y valida que el usuario no sea de google
         if ( !usuarioDB.google ) {campos.email = email;}
-        else if ( usuarioDB != email ) {
+        else if ( usuarioDB.email !== email ) {
             return res.status(400).json({
                 ok: false,
-                msg: 'Usuario de google no pueden cambiar su correo'
+                msg: '¡¡¡Usuario de google no pueden cambiar su correo'
             });
         }
-        
+
          const usuarioActualizado = await Usuario.findByIdAndUpdate(uid, campos, { new: true } );
         res.json({
            ok: true, 
